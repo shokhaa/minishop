@@ -42,4 +42,18 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+
+
+    <table class="table table-bordered">
+        <?
+        $i = 0;
+        foreach ($productInfo as $item) {
+            $i++;
+            echo "<tr>";
+            echo "<td>{$item['info_name']} : <b>{$item['info_value']}</b></td>";
+            echo "</tr>";
+
+        }
+        ?>
+    </table>
 </div>

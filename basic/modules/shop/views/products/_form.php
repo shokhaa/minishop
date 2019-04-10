@@ -37,23 +37,33 @@ use yii\widgets\ActiveForm;
     ]);
 
     ?>
+    <div class="info" style="margin-top: 15px">
+<div style="display: flex">
+    <input class="form-control" type="text" name="info[0][name]">
+    <input class="form-control" type="text" name="info[0][value]">
+</div>
 
+    </div>
 
-    <?= $form->field($model, 'price_to')->textInput() ?>
-    <?= $form->field($model, 'type_id')->widget(kartik\select2\Select2::classname(), [
-        'data' => $type,
-        'value' => '2',
-        'language' => 'ru',
-        'options' => ['placeholder' => 'Select a state ...', 'value' => $model->type_id],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-    ]);
-    ?>
+    <br>
+    <div onclick="addInputForm();" class="dobavit">Add more info</div>
+    <br>
+<!--    --><?//= $form->field($model, 'price_to')->textInput() ?>
+<!--    --><?//= $form->field($model, 'type_id')->widget(kartik\select2\Select2::classname(), [
+//        'data' => $type,
+//        'value' => '2',
+//        'language' => 'ru',
+//        'options' => ['placeholder' => 'Select a state ...', 'value' => $model->type_id],
+//        'pluginOptions' => [
+//            'allowClear' => true
+//        ],
+//    ]);
+//    ?>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
+
 
 </div>

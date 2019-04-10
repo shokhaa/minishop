@@ -6,6 +6,7 @@ namespace app\modules\shop\controllers;
 
 use app\modules\shop\models\Category;
 use app\modules\shop\models\CatProduct;
+use app\modules\shop\models\InfoProduct;
 use app\modules\shop\models\Type;
 use Yii;
 use app\modules\shop\models\Products;
@@ -72,8 +73,10 @@ class ProductsController extends Controller
      */
     public function actionView($id)
     {
+        $productInfo = InfoProduct::find()->where(['product_id' => $id])->all();
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'productInfo' => $productInfo
         ]);
     }
 
@@ -98,6 +101,9 @@ class ProductsController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
+            echo "<pre>";
+//            print_r($_POST['info']);
+//            die('stop');
             $db = Yii::$app->db;
             $transaction = $db->beginTransaction();
 
@@ -110,8 +116,15 @@ class ProductsController extends Controller
                     $catProduct->category_id = $category;
                     $catProduct->save();
                 }
-
-
+                foreach ($_POST['info'] as $item) {
+                    $infoProduct = new InfoProduct();
+                    $infoProduct->product_id = $model->id;
+                    $infoProduct->info_name = $item['name'];
+                    $infoProduct->info_value = $item['value'];
+                    $infoProduct->save();
+                }
+                
+                
                 $transaction->commit();
                 return $this->redirect(['view', 'id' => $model->id]);
             } catch(\Exception $e) {
