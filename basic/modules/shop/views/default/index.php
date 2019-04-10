@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         '<span class="glyphicon glyphicon-check"></span>',
                         $url,
                         [
-                            'title' => 'Пришел сегодня',
+                            'title' => 'Добавить',
                             'data-pjax' => '0',
                             'data-confirm' => Yii::t('yii', 'Действительно хотите добавить корзинку?'),
                             'data-method' => 'post',
