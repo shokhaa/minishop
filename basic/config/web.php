@@ -14,7 +14,7 @@ $config = [
     'modules' => [
         'shop' => [
             'class' => 'app\modules\shop\Module',
-//            'layout' => 'main'
+            'layout' => 'main'
 
         ],
     ],
