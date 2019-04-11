@@ -39,8 +39,8 @@ use yii\widgets\ActiveForm;
     ?>
     <div class="info" style="margin-top: 15px">
 <div style="display: flex">
-    <input class="form-control" type="text" name="info[0][name]">
-    <input class="form-control" type="text" name="info[0][value]">
+    <input class="form-control" placeholder="product info name" type="text" name="info[0][name]">
+    <input class="form-control" type="text"  placeholder="product info value" name="info[0][value]">
 </div>
 
     </div>
