@@ -75,10 +75,13 @@ class ProductsController extends Controller
      */
     public function actionView($id)
     {
+        /** @var TYPE_NAME $productInfo */
         $productInfo = InfoProduct::find()->where(['product_id' => $id])->all();
+        $produuctImages = \app\modules\shop\models\Images::find()->where(['product_id' => $id])->all();
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'productInfo' => $productInfo
+            'productInfo' => $productInfo,
+            'productImages' => $produuctImages
         ]);
     }
 
