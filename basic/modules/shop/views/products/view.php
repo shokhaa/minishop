@@ -1,4 +1,6 @@
 <?php
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -56,4 +58,15 @@ $this->params['breadcrumbs'][] = $this->title;
         }
         ?>
     </table>
+
+    <?php
+    foreach ($productImages as $images) {
+        echo Html::img("/uploads/product/" . $images['name'], ['width' => '200', 'height' => '100']);
+//        echo Html::a('Delete', '/admin/objects/delimg?id='.$imagesObject['id'])." | ";
+
+
+    }
+
+    ?>
+
 </div>
