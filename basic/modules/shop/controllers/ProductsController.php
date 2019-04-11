@@ -3,7 +3,8 @@
 namespace app\modules\shop\controllers;
 
 
-
+use app\models\Images;
+use app\models\PhotoUpload;
 use app\modules\shop\models\Category;
 use app\modules\shop\models\CatProduct;
 use app\modules\shop\models\InfoProduct;
@@ -17,6 +18,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * ProductsController implements the CRUD actions for Products model.
@@ -88,21 +90,25 @@ class ProductsController extends Controller
     public function actionCreate()
     {
         $model = new Products();
-        $typeArray = Type::find()->asArray()->indexBy('id')->all();
+        $uploadPhotoProduct = new \app\modules\shop\models\PhotoUpload();
 
+        $typeArray = Type::find()->asArray()->indexBy('id')->all();
 
 
         $type = ArrayHelper::map($typeArray, 'id', 'title');
 
 
         $category = Category::find()->all();
-        $category= ArrayHelper::map($category, 'id', 'title');
+        $category = ArrayHelper::map($category, 'id', 'title');
 
 
         if ($model->load(Yii::$app->request->post())) {
 
-            echo "<pre>";
-//            print_r($_POST['info']);
+            $uploadPhotoProduct->file = UploadedFile::getInstances($uploadPhotoProduct, 'file');
+
+//            echo "<pre>";
+//            print_r($_POST);
+//            print_r($uploadPhotoProduct->file);
 //            die('stop');
             $db = Yii::$app->db;
             $transaction = $db->beginTransaction();
@@ -123,32 +129,34 @@ class ProductsController extends Controller
                     $infoProduct->info_value = $item['value'];
                     $infoProduct->save();
                 }
-                
-                
+                foreach ($uploadPhotoProduct->file as $file) {
+                    $gen = Yii::$app->security->generateRandomString(7);
+                    $file->saveAs('uploads/product/' . $gen . '.' . $file->extension);
+
+                    $image = new \app\modules\shop\models\Images();
+                    $image->name = $gen . '.' . $file->extension;
+                    $image->product_id = $model->id;
+                    $image->save();
+                }
+
                 $transaction->commit();
                 return $this->redirect(['view', 'id' => $model->id]);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 $transaction->rollBack();
                 throw $e;
-            } catch(\Throwable $e) {
+            } catch (\Throwable $e) {
                 $transaction->rollBack();
             }
-
-
 
 
         }
 
 
-
-
-
-
-
         return $this->render('create', [
             'model' => $model,
             'type' => $type,
-            'category' => $category
+            'category' => $category,
+            'uploadPhotoProduct' => $uploadPhotoProduct
         ]);
     }
 
@@ -164,7 +172,7 @@ class ProductsController extends Controller
         $model = $this->findModel($id);
         $typeArray = Type::find()->asArray()->indexBy('id')->all();
         $category = Category::find()->all();
-        $category= ArrayHelper::map($category, 'id', 'title');
+        $category = ArrayHelper::map($category, 'id', 'title');
 
 
         $selectedCategory = [];
@@ -177,7 +185,7 @@ class ProductsController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 
             $delIngredients = CatProduct::deleteAll(['product_id' => $model->id]);
-            if ($delIngredients && $model->save()){
+            if ($delIngredients && $model->save()) {
                 foreach ($_POST['category'] as $item) {
 
                     $catProduct = new CatProduct();
