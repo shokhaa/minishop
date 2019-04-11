@@ -17,6 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'type' => $type,
         'category' => $category,
+        'uploadPhotoProduct' => $uploadPhotoProduct
+
 
     ]) ?>
 
